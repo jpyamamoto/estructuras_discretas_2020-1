@@ -20,7 +20,6 @@ palindromo word = word == reverse word
 -- --> minMax [1,2,3,4,5] = (1,5)
 -- --> minMax "hola" = ('a','o')
 minMax :: Ord a => [a] -> (a,a)
-minMax [] = error "Lista vacía"
 minMax list = (minimum list, maximum list)
 
 -- | rotar. Obtiene la lista obtenida poniendo los primeros n elementos al final de la lista.
