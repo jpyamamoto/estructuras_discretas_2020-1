@@ -22,6 +22,7 @@ palindromo word = word == reverse word
 -- --> minMax [1,2,3,4,5] = (1,5)
 -- --> minMax "hola" = ('a','o')
 minMax :: Ord a => [a] -> (a,a)
+minMax [] = error "Lista vacía"
 minMax list = (minimum list, maximum list)
 
 -- | rotar. Obtiene la lista obtenida poniendo los primeros n elementos al final de la lista.
@@ -29,36 +30,42 @@ minMax list = (minimum list, maximum list)
 -- --> rotar 3 [5,6,7,8,9] = [8,9,5,6,7]
 -- --> rotar 2 "hola" = "laho"
 rotar :: Int -> [a] -> [a]
+rotar n [] = error "Lista vacía"
 rotar n list = drop n list ++ take n list
 
 -- | atN. Devuelve el elemento en la n-ésima posición de la lista.
 --
 -- --> atN [1,2,4,6,7] 3 = 4
 atN :: [a] -> Int -> a
+atN [] n = error "Lista vacía"
 atN list n = list !! (n - 1)
 
 -- | selectMin. Selecciona los primeros k elementos de una lista, siendo k el elemento más pequeño de la lista.
 --
 -- --> selectMin [2,4,6,2,1,9] = [2]
 selectMin :: [Int] -> [Int]
+selectMin [] = error "Lista vacía"
 selectMin list = take (minimum list) list
 
 -- | delN. Función que elimina el n-ésimo elemento de una lista
 --
 -- --> delN 4 [3,6,7,2,6,72] = [3,6,7,6,72]
 delN :: Int -> [a] -> [a]
+delN n [] = error "Lista vacía"
 delN n list = (take (n - 1) list) ++ (drop n list)
 
 -- | dIntervalos. Función que elimina los elementos de un intervalo de una lista.
 --
 -- --> dIntervalos 2 4 [1,2,3,4,5,6,7] = [1,5,6,7]
 dIntervalos :: Int -> Int -> [a] -> [a]
+dIntervalos min max [] = error "Lista vacía"
 dIntervalos min max list = (take (min - 1) list) ++ (drop max list)
 
 -- | avgLen. Función que nos dice si el promedio de los elementos es menor que la longitud de la lista que los contiene
 --
 -- --> avgLen [1,2,3,14] = False
 avgLen :: [Int] -> Bool
+avgLen [] = error "Lista vacía"
 avgLen list = ((sum list) `div` length list) < length list
 
 -- | primeros. Recibe una lista de duplas y regresa la lista con el primer elemento de cada par.
