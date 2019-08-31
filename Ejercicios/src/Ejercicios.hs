@@ -8,6 +8,7 @@
 
 module Ejercicios where
 
+import Data.List
 
 -- | reverse. Función que regresa una lista en reversa.
 --
@@ -47,3 +48,9 @@ suma [] = 0
 suma (n:ns) = n + suma ns
 
 -- | isort
+--
+-- --> isort [3,7,4,8,9] = [3,4,7,8,9]
+isort :: [Int] -> [Int]
+isort [] = []
+isort lista = min:(isort (delete min lista))
+  where min = minimum lista
