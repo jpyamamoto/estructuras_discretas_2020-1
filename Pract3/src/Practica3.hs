@@ -29,7 +29,10 @@ type Estado = [Var]
 
 -- | negar. Regresa la fórmula simplificada que resulta de negar la fórmula recibida.
 --
--- --> negar
+-- --> negar (Prop A)       = Neg (Prop A)
+-- --> negar Verdadero      = Falso
+-- --> negar Falso          = Verdadero
+-- --> negar (Neg (Prop A)) = Prop A
 negar :: Formula -> Formula
 negar (Prop x)    = Neg (Prop x)
 negar Verdadero   = Falso
