@@ -90,6 +90,31 @@ conjPotencia [] = [[]]
 conjPotencia (x:xs) = conjPotencia xs ++ conjPotAux x (conjPotencia xs)
   where conjPotAux x xs = [[x] ++ ys | ys <- xs]
 
+-- | estados. Regresa los posibles estados para las variables involucradas en una fórmula.
+--
+-- --> estados
+estados :: Formula -> [Estado]
+estados formula = conjPotencia (vars formula)
+
+-- | tautologia. Regresa True si es tautología, False en otro caso.
+--
+-- --> tautologia
+tautologia :: Formula -> Bool
+tautologia formula = and' [interp estado formula | estado <- estados formula]
+
+-- | contradiccion. Regresa True si es contradicción, False en otro caso.
+--
+-- --> contradiccion
+contradiccion :: Formula -> Bool
+contradiccion formula = and' [interp estado negacion | estado <- estados formula]
+  where negacion = negar formula
+
+-- | contingencia. Regresa True si es contingencia, False en otro caso.
+--
+-- --> contingencia
+contingencia :: Formula -> Bool
+contingencia formula = not (tautologia formula) && not (contradiccion formula)
+
 -- **************************
 -- *                        *
 -- *   Métodos Auxiliares   *
@@ -111,3 +136,13 @@ eliminaRep :: Eq a => [a] -> [a]
 eliminaRep xs = auxEliminaRep xs []
   where auxEliminaRep [] _ = []
         auxEliminaRep (x:xs) ys = if esElemento x ys then auxEliminaRep xs ys else x:(auxEliminaRep xs (x:ys))
+
+-- | and'. Determina si todos los valores en la lista son verdaderos.
+--
+-- --> and' [True, True, True] = True
+-- --> and' [True, True, False] = False
+and' :: [Bool] -> Bool
+and' [] = True
+and' (False:xs) = False
+and' (x:xs) = and' xs
+
