@@ -50,7 +50,7 @@ eliminacion :: Formula -> Formula
 eliminacion (Prop x)    = (Prop x)
 eliminacion Verdadero   = Verdadero
 eliminacion Falso       = Falso
-eliminacion (Neg a)     = Neg a
+eliminacion (Neg a)     = negar (eliminacion a)
 eliminacion (a :&: b)   = (eliminacion a) :&: (eliminacion b)
 eliminacion (a :|: b)   = (eliminacion a) :|: (eliminacion b)
 eliminacion (a :=>: b)  = (negar a) :|: b
