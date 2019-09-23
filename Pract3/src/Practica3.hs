@@ -31,8 +31,8 @@ type Estado = [Var]
 --
 -- --> negar (Prop A)       = Neg (Prop A)
 -- --> negar Verdadero      = Falso
--- --> negar Falso          = Verdadero
 -- --> negar (Neg (Prop A)) = Prop A
+-- --> negar (Prop A :<=>: Prop B) = (Prop A :&: Neg (Prop B)) :|: (Prop B :&: Neg (Prop A))
 negar :: Formula -> Formula
 negar (Prop x)    = Neg (Prop x)
 negar Verdadero   = Falso
@@ -45,7 +45,8 @@ negar (a :<=>: b) = negar ((a :=>: b) :&: (b :=>: a))
 
 -- | eliminacion. Regresa la fórmula recibida pero sin símbolos de implicación o doble implicación.
 --
--- --> eliminacion
+-- --> eliminacion (Prop A :=>: Prop B :|: Prop C) = Neg (Prop A) :|: (Prop B :|: Prop C)
+-- --> eliminacion ((Prop A :|: Prop B) :=>: (Prop B :&: Prop C)) = (Neg (Prop A) :&: Neg (Prop B)) :|: (Prop B :&: Prop C)
 eliminacion :: Formula -> Formula
 eliminacion (Prop x)    = (Prop x)
 eliminacion Verdadero   = Verdadero
@@ -59,6 +60,8 @@ eliminacion (a :<=>: b) = (eliminacion (a :=>: b)) :&: (eliminacion (b :=>: a))
 -- | vars. Regresa una lista con las variables que contiene una fórmula.
 --
 -- --> vars
+-- --> vars (Prop A :&: Prop B :&: Prop C) = [A,B,C]
+-- --> vars (Prop A :&: Prop B :|: Neg (Prop B) :&: Prop C) = [A,B,C]
 vars :: Formula -> [Var]
 vars a = eliminaRep (varsAux a)
 
@@ -74,7 +77,8 @@ varsAux (a :<=>: b) = vars a ++ vars b
 
 -- | interp. Regresa a qué valor evalúa una fórmula dados los estados de sus variables.
 --
--- --> interp
+-- --> interp [A, B] (Prop A :=>: (Prop B :&: Prop C)) = False
+-- --> interp [A] (Prop A :|: Neg (Prop A)) = True
 interp :: Estado -> Formula -> Bool
 interp estados (Prop x)    = if esElemento x estados then True else False
 interp estados Verdadero   = True
@@ -87,7 +91,8 @@ interp estados (a :<=>: b) = interp estados (eliminacion (a :<=>: b))
 
 -- | conjPotencia. Regresa el conjunto potencia de una lista.
 --
--- --> conjPotencia
+-- --> conjPotencia [A,B,C] = [[],[C],[B],[B,C],[A],[A,C],[A,B],[A,B,C]]
+-- --> conjPotencia [] = [[]]
 conjPotencia :: [a] -> [[a]]
 conjPotencia [] = [[]]
 conjPotencia (x:xs) = conjPotencia xs ++ conjPotAux x (conjPotencia xs)
@@ -95,26 +100,31 @@ conjPotencia (x:xs) = conjPotencia xs ++ conjPotAux x (conjPotencia xs)
 
 -- | estados. Regresa los posibles estados para las variables involucradas en una fórmula.
 --
--- --> estados
+-- --> estados (Prop A :&: Prop B :&: Prop C) = [[],[C],[B],[B,C],[A],[A,C],[A,B],[A,B,C]]
+-- --> estados (Prop A :&: Neg (Prop A)) = [[],[A]]
 estados :: Formula -> [Estado]
 estados formula = conjPotencia (vars formula)
 
 -- | tautologia. Regresa True si es tautología, False en otro caso.
 --
 -- --> tautologia
+-- --> tautologia (Prop A :|: Neg (Prop A)) = True
+-- --> tautologia (Prop A :<=>: Prop B) = False
 tautologia :: Formula -> Bool
 tautologia formula = and' [interp estado formula | estado <- estados formula]
 
 -- | contradiccion. Regresa True si es contradicción, False en otro caso.
 --
--- --> contradiccion
+-- --> contradiccion (Prop A :&: Neg (Prop A)) = True
+-- --> contradiccion (Prop A :&: Neg (Prop B)) = False
 contradiccion :: Formula -> Bool
 contradiccion formula = and' [interp estado negacion | estado <- estados formula]
   where negacion = negar formula
 
 -- | contingencia. Regresa True si es contingencia, False en otro caso.
 --
--- --> contingencia
+-- --> contingencia (Prop A :|: Prop B :=>: Prop C) = True
+-- --> contingencia (Prop A :|: Verdadero) = False
 contingencia :: Formula -> Bool
 contingencia formula = not (tautologia formula) && not (contradiccion formula)
 
