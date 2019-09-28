@@ -80,7 +80,7 @@ varsAux (a :<=>: b) = vars a ++ vars b
 -- --> interp [A, B] (Prop A :=>: (Prop B :&: Prop C)) = False
 -- --> interp [A] (Prop A :|: Neg (Prop A)) = True
 interp :: Estado -> Formula -> Bool
-interp estados (Prop x)    = if esElemento x estados then True else False
+interp estados (Prop x)    = esElemento x estados
 interp estados Verdadero   = True
 interp estados Falso       = False
 interp estados (Neg a)     = not (interp estados a)
