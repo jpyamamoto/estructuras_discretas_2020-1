@@ -71,3 +71,24 @@ minimo (Node i c Void)    = minimum [(minimo i), c]
 minimo (Node Void c d)    = minimum [c, (minimo d)]
 minimo (Node i c d)       = minimum [(minimo d), c, (minimo i)]
 
+-- | firstSnoc. Regresa el primer elemento de una lista Snoc.
+--
+-- --> firstSnoc
+firstSnoc :: SnocList a -> a
+firstSnoc (Snoc Empty a) = a
+firstSnoc (Snoc a _)     = firstSnoc a
+
+-- | lengthSnoc. Regresa la longitud de una lista Snoc.
+--
+-- --> lengthSnoc
+lengthSnoc :: SnocList a -> Int
+lengthSnoc (Snoc Empty _) = 1
+lengthSnoc (Snoc a _)     = 1 + lengthSnoc a
+
+-- | concatSnoc. Concatena dos listas Snoc.
+--
+-- --> concatSnoc
+concatSnoc :: SnocList a -> SnocList a -> SnocList a
+concatSnoc ls (Snoc Empty a) = (Snoc ls a)
+concatSnoc ls (Snoc a b)     = concatSnoc (Snoc ls b) a
+
