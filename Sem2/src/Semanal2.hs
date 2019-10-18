@@ -34,8 +34,8 @@ multNat a (Suc b)    = multNat (sumaNat a a) b
 --
 -- --> menorNat
 menorNat :: Nat -> Nat -> Bool
-menorNat Zero b          = True
 menorNat a Zero          = False
+menorNat Zero b          = True
 menorNat (Suc a) (Suc b) = menorNat a b
 
 -- | mayorNat. Decide si a es mayor que b.
@@ -51,15 +51,13 @@ mayorNat (Suc a) (Suc b) = mayorNat a b
 -- --> inTree
 inTree :: Ord a => a -> BTree a -> Bool
 inTree a Void         = False
-inTree a (Node i c d) = if a == c then True else (inTree a i) || (inTree a d)
+inTree a (Node i c d) = a == c || (inTree a i) || (inTree a d)
 
 -- | maximo. Regresa el elemento con mayor valor de un árbol.
 --
 -- --> maximo
 maximo :: Ord a => BTree a -> a
 maximo (Node Void c Void) = c
-maximo (Node i c Void)    = maximum [(maximo i), c]
-maximo (Node Void c d)    = maximum [c, (maximo d)]
 maximo (Node i c d)       = maximum [(maximo d), c, (maximo i)]
 
 -- | minimo. Regresa el elemento con minimo valor de un árbol.
@@ -67,8 +65,6 @@ maximo (Node i c d)       = maximum [(maximo d), c, (maximo i)]
 -- --> minimo
 minimo :: Ord a => BTree a -> a
 minimo (Node Void c Void) = c
-minimo (Node i c Void)    = minimum [(minimo i), c]
-minimo (Node Void c d)    = minimum [c, (minimo d)]
 minimo (Node i c d)       = minimum [(minimo d), c, (minimo i)]
 
 -- | firstSnoc. Regresa el primer elemento de una lista Snoc.
