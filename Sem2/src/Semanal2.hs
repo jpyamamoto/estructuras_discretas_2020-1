@@ -78,7 +78,7 @@ firstSnoc (Snoc a _)     = firstSnoc a
 --
 -- --> lengthSnoc
 lengthSnoc :: SnocList a -> Int
-lengthSnoc (Snoc Empty _) = 1
+lengthSnoc Empty          = 0
 lengthSnoc (Snoc a _)     = 1 + lengthSnoc a
 
 -- | concatSnoc. Concatena dos listas Snoc.
@@ -86,5 +86,5 @@ lengthSnoc (Snoc a _)     = 1 + lengthSnoc a
 -- --> concatSnoc
 concatSnoc :: SnocList a -> SnocList a -> SnocList a
 concatSnoc ls (Snoc Empty a) = (Snoc ls a)
-concatSnoc ls (Snoc a b)     = concatSnoc (Snoc ls b) a
+concatSnoc ls (Snoc a b)     = Snoc (concatSnoc ls a) b
 
