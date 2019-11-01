@@ -71,7 +71,7 @@ postorden (Node i r d) = (postorden i) ++ (postorden d) ++ [r]
 agregaOrd :: Ord a => a -> BTree a -> BTree a
 agregaOrd x Void = (Node Void x Void)
 agregaOrd x (Node i r d)
-  | x == r = (Node i r (Node d x Void))
+  | x == r = (Node i r (Node Void x d))
   | x < r  = (Node (agregaOrd x i) r d)
   | x > r  = (Node i r (agregaOrd x d))
 
