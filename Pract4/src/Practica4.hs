@@ -47,34 +47,34 @@ restaNat :: Nat -> Nat -> Nat
 restaNat numero Zero     = numero
 restaNat (Suc n) (Suc m) = restaNat n m
 
--- | preorden. Convierte un árbol binario a lista utilizando preorden.
+-- | preOrden. Convierte un árbol binario a lista utilizando preorden.
 --
--- --> preorden (Node (Node Void 1 Void) 2 (Node Void 3 Void)) = [2,1,3]
--- --> preorden (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = [8,3,1,6,4,7,10]
-preorden :: BTree a -> [a]
-preorden Void         = []
-preorden (Node i r d) = [r] ++ (preorden i) ++ (preorden d)
+-- --> preOrden (Node (Node Void 1 Void) 2 (Node Void 3 Void)) = [2,1,3]
+-- --> preOrden (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = [8,3,1,6,4,7,10]
+preOrden :: BTree a -> [a]
+preOrden Void         = []
+preOrden (Node i r d) = [r] ++ (preOrden i) ++ (preOrden d)
 
--- | inorden. Convierte un árbol binario a lista utilizando inorden.
+-- | inOrden. Convierte un árbol binario a lista utilizando inorden.
 --
--- --> inorden (Node (Node Void 1 Void) 2 (Node Void 3 Void)) = [1,2,3]
--- --> inorden (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = [1,3,4,6,7,8,10]
-inorden :: BTree a -> [a]
-inorden Void         = []
-inorden (Node i r d) = (inorden i) ++ [r] ++ (inorden d)
+-- --> inOrden (Node (Node Void 1 Void) 2 (Node Void 3 Void)) = [1,2,3]
+-- --> inOrden (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = [1,3,4,6,7,8,10]
+inOrden :: BTree a -> [a]
+inOrden Void         = []
+inOrden (Node i r d) = (inOrden i) ++ [r] ++ (inOrden d)
 
--- | postorden. Convierte un árbol binario a lista utilizando postorden.
+-- | postOrden. Convierte un árbol binario a lista utilizando postorden.
 --
--- --> postorden (Node (Node Void 1 Void) 2 (Node Void 3 Void)) = [1,3,2]
--- --> postorden (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = [1,4,7,6,3,10,8]
-postorden :: BTree a -> [a]
-postorden Void         = []
-postorden (Node i r d) = (postorden i) ++ (postorden d) ++ [r]
+-- --> postOrden (Node (Node Void 1 Void) 2 (Node Void 3 Void)) = [1,3,2]
+-- --> postOrden (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = [1,4,7,6,3,10,8]
+postOrden :: BTree a -> [a]
+postOrden Void         = []
+postOrden (Node i r d) = (postOrden i) ++ (postOrden d) ++ [r]
 
 -- | agregaOrd. Agrega un elemento en un árbol binario ordenado, manteniendo
 -- el órden.
 --
--- --> agregaOrd 5 (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = 
+-- --> agregaOrd 5 (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) =
 -- Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 (Node Void 5 Void)) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)
 -- --> agregaOrd 2 (Node (Node Void 1 Void) 2 (Node Void 3 Void)) =
 -- Node (Node Void 1 Void) 2 (Node Void 2 (Node Void 3 Void))
@@ -101,7 +101,7 @@ reflejo (Node i r d) = (Node (reflejo d) r (reflejo i))
 -- --> peso (Node (Node (Node Void 1 Void) 3 (Node (Node Void 4 Void) 6 (Node Void 7 Void))) 8 (Node Void 10 Void)) = 4
 peso :: BTree a -> Int
 peso Void         = 0
-peso (Node i r d) = maximum([1 + (peso i), 1, 1 + (peso d)])
+peso (Node i r d) = maximum([1 + (peso i), 1 + (peso d)])
 
 -- | size. Regresa la cantidad de elementos en un árbol.
 --
