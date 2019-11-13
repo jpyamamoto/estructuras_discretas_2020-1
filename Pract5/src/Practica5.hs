@@ -20,3 +20,37 @@ exgrado x (_, ys) = exgradoAux x ys
   where exgradoAux x []          = 0
         exgradoAux x ((a, _):ys) = if x == a then 1 + (exgradoAux x ys) else (exgradoAux x ys)
 
+esReflexiva :: Eq a => Graph a -> Bool
+esReflexiva ([], _)    = True
+esReflexiva (x:xs, ys) = if (esElemento (x, x) ys) then esReflexiva (xs, ys) else False
+
+esSimetrica :: Eq a => Graph a -> Bool
+esSimetrica (_, ys) = esSimetricaAux ys ys
+  where esSimetricaAux [] _           = True
+        esSimetricaAux ((a, b):xs) ys = if (esElemento (b, a) ys) then (esSimetricaAux xs ys) else False
+
+esAntisimetrica :: Eq a => Graph a -> Bool
+esAntisimetrica (_, xs) = esAntisimetricaAux xs xs
+  where esAntisimetricaAux [] ys          = True
+        esAntisimetricaAux ((a, b):xs) ys = if (a /= b) && (esElemento (b, a) ys) then False else esAntisimetricaAux xs ys
+
+cerrReflexiva :: Eq a => Graph a -> Graph a
+cerrReflexiva (xs, ys) = (xs, [(x, x) | x <- xs, not (esElemento (x, x) ys)] ++ ys)
+
+cerrSimetrica :: Eq a => Graph a -> Graph a
+cerrSimetrica (xs, ys) = (xs, [(y, x) | (x, y) <- ys, not (esElemento (y, x) ys)] ++ ys)
+
+
+-- **************************
+-- *                        *
+-- *   Métodos Auxiliares   *
+-- *                        *
+-- **************************
+
+-- | esElemento. Decide si un valor es un elemento de una lista.
+--
+-- --> esElemento 4 [1,2,3,4,5] = True
+-- --> esElemento 9 [1,2,3,4,5] = False
+esElemento :: Eq a => a -> [a] -> Bool
+esElemento _ [] = False
+esElemento y (x:xs) = if y /= x then esElemento y xs else True
