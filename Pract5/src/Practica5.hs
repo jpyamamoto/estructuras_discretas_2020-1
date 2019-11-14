@@ -40,6 +40,8 @@ cerrReflexiva (xs, ys) = (xs, [(x, x) | x <- xs, not (esElemento (x, x) ys)] ++ 
 cerrSimetrica :: Eq a => Graph a -> Graph a
 cerrSimetrica (xs, ys) = (xs, [(y, x) | (x, y) <- ys, not (esElemento (y, x) ys)] ++ ys)
 
+composicion :: Eq a => Graph a -> Graph a -> Graph a
+composicion (x, xs) (y, ys) = (x ++ [z | z <- y, not (esElemento z x)], [(a, d) | (a, b) <- xs, (c, d) <- ys, b == c])
 
 -- **************************
 -- *                        *
