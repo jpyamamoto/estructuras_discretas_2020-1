@@ -13,12 +13,12 @@ type Graph a = ([a], [(a, a)])
 ingrado :: Eq a => a -> Graph a -> Int
 ingrado x (_, ys) = ingradoAux x ys
   where ingradoAux x []          = 0
-        ingradoAux x ((_, b):ys) = if x == b then 1 + (ingradoAux x ys) else (ingradoAux x ys)
+        ingradoAux x ((_, b):ys) = if x == b then 1 + ingradoAux x ys else ingradoAux x ys
 
 exgrado :: Eq a => a -> Graph a -> Int
 exgrado x (_, ys) = exgradoAux x ys
   where exgradoAux x []          = 0
-        exgradoAux x ((a, _):ys) = if x == a then 1 + (exgradoAux x ys) else (exgradoAux x ys)
+        exgradoAux x ((a, _):ys) = if x == a then 1 + exgradoAux x ys else exgradoAux x ys
 
 esReflexiva :: Eq a => Graph a -> Bool
 esReflexiva ([], _)    = True
@@ -57,6 +57,6 @@ warshall :: Eq a => Graph a -> Int -> Graph a
 warshall graph 0    = graph
 warshall (xs, ys) n =
   let preWarshall    = snd (warshall (xs, ys) (n-1))
-      transitivo a b = elem (a, b) [(a, c) | a <- xs, b <- xs, c <- xs, (elem (a, b) preWarshall) && (elem (b, c) preWarshall)]
-  in  (xs, [(a, b) | a <- xs, b <- xs, (elem (a, b) preWarshall) || (transitivo a b)])
+      transitivo a b = elem (a, b) [(x, z) | x <- xs, y <- xs, z <- xs, elem (x, y) preWarshall && elem (y, z) preWarshall]
+  in  (xs, [(a, b) | a <- xs, b <- xs, elem (a, b) preWarshall || transitivo a b])
 
