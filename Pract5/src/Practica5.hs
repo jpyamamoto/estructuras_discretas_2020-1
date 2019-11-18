@@ -23,6 +23,11 @@ exgrado x (_, ys) = exgradoAux x ys
 trayectorias :: Eq a => a -> Graph a -> [[(a, a)]]
 trayectorias x (_, ys) = construyeCamino x [] ys
 
+esHamiltoniana :: Eq a => Graph a -> Bool
+esHamiltoniana (xs, edges) = esHamiltonianaAux (trayectorias (head xs) (xs, edges))
+  where esHamiltonianaAux []     = False
+        esHamiltonianaAux (y:ys) = (length y == length xs) || esHamiltonianaAux ys
+
 esReflexiva :: Eq a => Graph a -> Bool
 esReflexiva ([], _)    = True
 esReflexiva (x:xs, ys) = if (elem (x, x) ys) then esReflexiva (xs, ys) else False
@@ -64,8 +69,8 @@ warshall (xs, ys) n  =
 
 construyeCamino :: Eq a => a -> [(a, a)] -> [(a, a)] -> [[(a, a)]]
 construyeCamino x cam rel =
-  let caminos = [cam ++ [next] | next <- sucesores x rel, not (elem next cam)]
-      visitado f = sum [1 | (a, _) <- cam, f /= a]
-      sucesores m ns = [(a, b) | (a, b) <- ns, a == m, a /= b, (visitado a) <= 1]
+  let caminos     = [cam ++ [next] | next <- sucesores x, not (elem next cam)]
+      sucesores m = [(a, b) | (a, b) <- rel, a == m, a /= b, (visitado m) < 2]
+      visitado f  = sum [1 | (a, b) <- cam, f == a || f == b]
   in caminos ++ concat [construyeCamino (snd (last camino)) camino rel | camino <- caminos]
 
