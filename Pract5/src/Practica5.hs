@@ -81,6 +81,9 @@ cerrReflexiva (xs, ys) = (xs, [(x, x) | x <- xs, not (elem (x, x) ys)] ++ ys)
 cerrSimetrica :: Eq a => Graph a -> Graph a
 cerrSimetrica (xs, ys) = (xs, [(y, x) | (x, y) <- ys, not (elem (y, x) ys)] ++ ys)
 
+-- | composicion. Regresa la composición de dos gráficas.
+--
+-- --> composicion ([1,2,3,4,5], [(1,3),(1,4),(2,2),(2,5)]) ([1,2,3,4,5], [(1,2),(2,1),(3,4),(4,3)]) = ([1,2,3,4,5],[(1,4),(1,3),(2,1)])
 composicion :: Eq a => Graph a -> Graph a -> Graph a
 composicion (x, xs) (y, ys) = (x ++ [z | z <- y, not (elem z x)], [(a, d) | (a, b) <- xs, (c, d) <- ys, b == c])
 
